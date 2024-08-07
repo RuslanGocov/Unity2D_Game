@@ -1,0 +1,116 @@
+{
+    "name": "PlayerControll",
+    "maps": [
+        {
+            "name": "Movement",
+            "id": "cd3db2f0-2ba6-45f5-aaf3-25309ca49305",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "b4049920-8392-42b5-9af0-2ea139675db8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RL",
+                    "type": "Button",
+                    "id": "9590de01-7441-47cb-9576-faf6c964a00a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Punch",
+                    "type": "Button",
+                    "id": "93859f0a-be1d-4c14-9aa1-bd0511307e90",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Roll",
+                    "type": "Button",
+                    "id": "898b830e-c002-48ad-be16-9105dcf3961e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "815c99b8-967b-42c6-a1ae-bfa06fd13dd4",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "a1ca1813-a6af-448f-8944-158665e0b454",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RL",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "75a14926-b57e-46e3-afed-ae44afffab71",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RL",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "c6cfd106-8ff5-454a-a949-4cc6e22436c4",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RL",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1457e0ad-0c4d-4329-aff8-e57c5df59915",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Punch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "82e38ef4-8e86-4ec1-b28f-bc282ab6fd9c",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
