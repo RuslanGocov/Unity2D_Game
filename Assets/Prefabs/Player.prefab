@@ -62,8 +62,8 @@ Transform:
   m_GameObject: {fileID: 8620789366104219897}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -1.09, z: 0.013488136}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.8219, y: -1.09, z: 0.013488136}
+  m_LocalScale: {x: 1.5068, y: 1.5918, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6636449431198131044}
@@ -207,6 +207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 5
   speed: 5
+  rollForce: 5
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!95 &8024238709941100137
 Animator:
   serializedVersion: 5

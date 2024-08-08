@@ -183,7 +183,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.1549182
+  orthographic size: 4.7663283
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -208,7 +208,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.06, y: -0.77, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 682217988}
   - component: {fileID: 682217987}
   - component: {fileID: 682217986}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Square
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -380,9 +380,7 @@ MonoBehaviour:
   jumpForce: 5
   speed: 5
   rollForce: 10
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
+  rollDuration: 0.5
 --- !u!50 &1644957016
 Rigidbody2D:
   serializedVersion: 4
@@ -451,7 +449,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300140, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+  m_Sprite: {fileID: 21300142, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -516,8 +514,8 @@ Transform:
   m_GameObject: {fileID: 1644957014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.07, y: 0.1, z: 0.013488136}
-  m_LocalScale: {x: 1.0686314, y: 1.1453882, z: 0.5470903}
+  m_LocalPosition: {x: 0.03, y: -1.09, z: 0.013488136}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

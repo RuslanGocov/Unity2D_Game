@@ -6,54 +6,56 @@ using UnityEngine.InputSystem;
 
 public class PlayerControllScript : MonoBehaviour
 {
+    //Serialize Variables
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float rollForce = 10.0f; // Сила кувырка
-    [SerializeField] private float rollDuration = 0.5f;
+    [SerializeField] private float rollForce = 5.0f; // Сила кувырка
 
+    //Serialize Objects
+    [SerializeField] private LayerMask groundLayerMask;
+
+
+    //Variables
     private float moveDirection;
-    private bool isGround;
-
-    private bool isRight;
-    private bool isRolling;
+    private bool isRolling = false;
+    // private bool isGround;
 
 
+    //Objects
     private Rigidbody2D rb;
     private PlayerControll playerControls;
     private Animator animator;
+    private BoxCollider2D boxCollider2D;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     private void Awake()
     {
         playerControls = new PlayerControll();
+
+
         //A and D
         playerControls.Movement.RL.performed += context => Move_RL();
         //Space
         playerControls.Movement.Jump.performed += context => Jump();
         //Shift
-       //playerControls.Movement.Roll.performed += context => RollDown();
+        playerControls.Movement.Roll.started += context => Roll();
+
+        playerControls.Movement.Punch.started += context => puncing();
     }
 
 
     void Update()
     {
-        animator .SetBool("isGrounded", isGround);
+        animator.SetBool("isGrounded", isGrounded());
     }
 
-    private void OnEnable()
-    {
-        playerControls.Enable();
-    }
 
-    private void OnDisable()
-    {
-        playerControls.Disable();
-    }
 
     private void FixedUpdate()
     {
@@ -61,32 +63,6 @@ public class PlayerControllScript : MonoBehaviour
     }
 
 
-    public void Jump()
-    {
-        if (isGround)
-        {
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        }
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isGround = true;
-            
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isGround = false;
-            
-        }
-    }
 
 
     public void Move_RL()
@@ -104,7 +80,7 @@ public class PlayerControllScript : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        if (isGround)
+        if (isGrounded())
         {
             animator.SetBool("run", moveDirection != 0);
         }
@@ -114,13 +90,79 @@ public class PlayerControllScript : MonoBehaviour
         }
     }
     
-    
-    // public void RollDown()
-    // {
-    //     speed += 3.0f;
-    // }
+    private void Jump()
+    {
+        if (isGrounded())
+        {
+            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            animator.SetTrigger("jump");
+        }
+    }
 
 
+   
+    private void Roll()
+    {
+        if (isGrounded() && !isRolling)
+        {
+            isRolling = true;
+            animator.SetTrigger("roll"); // Убедитесь, что у вас есть соответствующая анимация
+
+            // Определите направление кувырка
+            Vector2 rollDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+
+            // Примените силу к игроку для выполнения кувырка
+            rb.velocity = new Vector2(0, rb.velocity.y); // Остановите текущее горизонтальное движение
+            rb.AddForce(rollDirection * rollForce, ForceMode2D.Impulse);
+
+            // Время, через которое закончится кувырок
+            Invoke("EndRoll", 0.5f);
+        }
+    }
+
+    private void EndRoll()
+    {
+        isRolling = false;
+        animator.SetBool("roll", isRolling);
+    }
+
+    private void puncing()
+    {
+        animator.SetTrigger("punc");
+    }
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private bool isGrounded()
+    {
+        RaycastHit2D raycastHit2D = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0,
+            Vector2.down, 0.1f, groundLayerMask);
+        return raycastHit2D.collider != null;
+    }
+    
+    
+    
+    private void OnEnable()
+    {
+        playerControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Disable();
+    }
+
 }
