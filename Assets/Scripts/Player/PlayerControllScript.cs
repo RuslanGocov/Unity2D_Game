@@ -36,22 +36,13 @@ public class PlayerControllScript : MonoBehaviour
         //Space
         playerControls.Movement.Jump.performed += context => Jump();
         //Shift
-        playerControls.Movement.Roll.performed += context => RollDown();
+       //playerControls.Movement.Roll.performed += context => RollDown();
     }
 
 
     void Update()
     {
-        if (isGround)
-        {
-            animator.SetBool("isGrounded", false);
-        }
-        else
-        {
-            animator.SetBool("isGrounded", true);
-        }
-
-        
+        animator .SetBool("isGrounded", isGround);
     }
 
     private void OnEnable()
@@ -84,6 +75,7 @@ public class PlayerControllScript : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGround = true;
+            
         }
     }
 
@@ -92,6 +84,7 @@ public class PlayerControllScript : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGround = false;
+            
         }
     }
 
