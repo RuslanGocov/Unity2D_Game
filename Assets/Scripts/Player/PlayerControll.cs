@@ -62,6 +62,15 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""81e60a4d-4073-4eb8-bfa3-d62f69f5f0a6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -130,6 +139,17 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd9dc6de-e65b-476e-a1ee-762852f9853e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -142,6 +162,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         m_Movement_RL = m_Movement.FindAction("RL", throwIfNotFound: true);
         m_Movement_Punch = m_Movement.FindAction("Punch", throwIfNotFound: true);
         m_Movement_Roll = m_Movement.FindAction("Roll", throwIfNotFound: true);
+        m_Movement_Block = m_Movement.FindAction("Block", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_RL;
     private readonly InputAction m_Movement_Punch;
     private readonly InputAction m_Movement_Roll;
+    private readonly InputAction m_Movement_Block;
     public struct MovementActions
     {
         private @PlayerControll m_Wrapper;
@@ -215,6 +237,7 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         public InputAction @RL => m_Wrapper.m_Movement_RL;
         public InputAction @Punch => m_Wrapper.m_Movement_Punch;
         public InputAction @Roll => m_Wrapper.m_Movement_Roll;
+        public InputAction @Block => m_Wrapper.m_Movement_Block;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -236,6 +259,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @Roll.started += instance.OnRoll;
             @Roll.performed += instance.OnRoll;
             @Roll.canceled += instance.OnRoll;
+            @Block.started += instance.OnBlock;
+            @Block.performed += instance.OnBlock;
+            @Block.canceled += instance.OnBlock;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
@@ -252,6 +278,9 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
             @Roll.started -= instance.OnRoll;
             @Roll.performed -= instance.OnRoll;
             @Roll.canceled -= instance.OnRoll;
+            @Block.started -= instance.OnBlock;
+            @Block.performed -= instance.OnBlock;
+            @Block.canceled -= instance.OnBlock;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -275,5 +304,6 @@ public partial class @PlayerControll: IInputActionCollection2, IDisposable
         void OnRL(InputAction.CallbackContext context);
         void OnPunch(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
     }
 }
