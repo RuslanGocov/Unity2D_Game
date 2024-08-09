@@ -10,6 +10,8 @@ public class PlayerControllScript : MonoBehaviour
     [SerializeField] private float jumpForce = 3.0f;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float rollForce = 5.0f; // Сила кувырка
+    [SerializeField] private float wallSlodingSpeed = 10.0f;
+
 
     //Serialize Objects
     [SerializeField] private LayerMask groundLayerMask;
@@ -57,6 +59,8 @@ public class PlayerControllScript : MonoBehaviour
     {
         animator.SetBool("isGrounded", isGrounded());
         animator.SetBool("onWall", onWall());
+        wallSlide();
+
     }
 
 
@@ -84,15 +88,15 @@ public class PlayerControllScript : MonoBehaviour
         {
             rb.velocity = new Vector2(moveDirection * speed, rb.velocity.y);
 
-            if (onWall() && !isGrounded())
-            {
-                rb.gravityScale = 0;
-                rb.velocity = Vector2.zero;
-            }
-            else
-            {
-                rb.gravityScale = 1;
-            }
+            // if (onWall() && !isGrounded())
+            // {
+            //     rb.gravityScale = 0;
+            //     rb.velocity = Vector2.zero;
+            // }
+            // else
+            // {
+            //     rb.gravityScale = 1;
+            // }
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -130,7 +134,6 @@ public class PlayerControllScript : MonoBehaviour
                 transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
                 animator.SetTrigger("jump");
-                
             }
             else
             {
@@ -177,7 +180,6 @@ public class PlayerControllScript : MonoBehaviour
         {
             animator.SetTrigger("punc");
         }
-        
     }
 
 
@@ -194,6 +196,20 @@ public class PlayerControllScript : MonoBehaviour
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0,
             new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
         return raycastHit.collider != null;
+    }
+
+
+    private void wallSlide()
+    {
+        if (onWall() && !isGrounded() && moveDirection == 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlodingSpeed, float.MaxValue));
+            print("wall slide");
+        }
+        else
+        {
+            print("No wall slide");
+        }
     }
 
 
