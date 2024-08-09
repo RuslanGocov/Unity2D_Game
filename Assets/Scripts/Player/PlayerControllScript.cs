@@ -7,17 +7,20 @@ using UnityEngine.InputSystem;
 public class PlayerControllScript : MonoBehaviour
 {
     //Serialize Variables
-    [SerializeField] private float jumpForce = 5.0f;
+    [SerializeField] private float jumpForce = 3.0f;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float rollForce = 5.0f; // Сила кувырка
 
     //Serialize Objects
     [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private LayerMask wallLayer;
 
 
     //Variables
     private float moveDirection;
+    private float wallJumpCooldown;
     private bool isRolling = false;
+
     // private bool isGround;
 
 
@@ -53,8 +56,8 @@ public class PlayerControllScript : MonoBehaviour
     void Update()
     {
         animator.SetBool("isGrounded", isGrounded());
+        animator.SetBool("onWall", onWall());
     }
-
 
 
     private void FixedUpdate()
@@ -63,13 +66,10 @@ public class PlayerControllScript : MonoBehaviour
     }
 
 
-
-
     public void Move_RL()
     {
         moveDirection = playerControls.Movement.RL.ReadValue<float>();
 
-        rb.velocity = new Vector2(moveDirection * speed, rb.velocity.y);
 
         if (moveDirection > 0.01f)
         {
@@ -80,6 +80,31 @@ public class PlayerControllScript : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
+        if (wallJumpCooldown < 0.2f)
+        {
+            rb.velocity = new Vector2(moveDirection * speed, rb.velocity.y);
+
+            if (onWall() && !isGrounded())
+            {
+                rb.gravityScale = 0;
+                rb.velocity = Vector2.zero;
+            }
+            else
+            {
+                rb.gravityScale = 1;
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                Jump();
+            }
+        }
+        else
+        {
+            wallJumpCooldown += Time.deltaTime;
+        }
+
+
         if (isGrounded())
         {
             animator.SetBool("run", moveDirection != 0);
@@ -89,7 +114,7 @@ public class PlayerControllScript : MonoBehaviour
             animator.SetBool("run", false);
         }
     }
-    
+
     private void Jump()
     {
         if (isGrounded())
@@ -97,10 +122,30 @@ public class PlayerControllScript : MonoBehaviour
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             animator.SetTrigger("jump");
         }
+        else if (onWall() && !isGrounded())
+        {
+            if (moveDirection == 0)
+            {
+                rb.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 40, 0);
+                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y,
+                    transform.localScale.z);
+                animator.SetTrigger("jump");
+                
+            }
+            else
+            {
+                rb.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 1, 6);
+                animator.SetTrigger("jump");
+            }
+
+            isGrounded();
+        }
+
+
+        wallJumpCooldown = 0;
     }
 
 
-   
     private void Roll()
     {
         if (isGrounded() && !isRolling)
@@ -128,33 +173,30 @@ public class PlayerControllScript : MonoBehaviour
 
     private void puncing()
     {
-        animator.SetTrigger("punc");
+        if (!onWall())
+        {
+            animator.SetTrigger("punc");
+        }
+        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
     private bool isGrounded()
     {
         RaycastHit2D raycastHit2D = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0,
             Vector2.down, 0.1f, groundLayerMask);
         return raycastHit2D.collider != null;
     }
-    
-    
-    
+
+
+    private bool onWall()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0,
+            new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        return raycastHit.collider != null;
+    }
+
+
     private void OnEnable()
     {
         playerControls.Enable();
@@ -164,5 +206,4 @@ public class PlayerControllScript : MonoBehaviour
     {
         playerControls.Disable();
     }
-
 }
